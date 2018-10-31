@@ -1,0 +1,104 @@
+#CREATE ROLES
+PUT _xpack/security/role/elasticon_policy
+{
+  "indices": [{
+    "names": [ "elasticon-dc-2018" ],
+    "privileges": [ "read" ],
+    "query": {
+      "template": {
+        "source": "{\"bool\": {\"filter\": [{\"terms\": {\"region\": {{#toJson}}_user.metadata.security.region{{/toJson}}}},{\"terms\": {\"security_level\": {{#toJson}}_user.metadata.security.level{{/toJson}}}},{\"terms_set\": {\"security_compartments\": {\"terms\":{{#toJson}}_user.metadata.security.compartments{{/toJson}},\"minimum_should_match_field\":\"security_compartments_min\"}}},{\"terms\": {\"security_dissemination\": {{#toJson}}_user.metadata.security.dissemination{{/toJson}}}},{\"terms\":{\"source\":{{#toJson}}_user.metadata.security.source{{/toJson}}}}]}}"
+      }
+    }
+  }]
+}
+PUT _xpack/security/role/elasticon_external_policy
+{
+  "indices": [{
+    "names": [ "elasticon-dc-2018" ],
+    "privileges": [ "read" ],
+    "query": {
+      "template": {
+        "source": "{\"bool\": {\"filter\": [{\"terms\": {\"region\": {{#toJson}}_user.metadata.security.region{{/toJson}}}},{\"terms\": {\"security_level\": {{#toJson}}_user.metadata.security.level{{/toJson}}}},{\"terms_set\": {\"security_compartments\": {\"terms\":{{#toJson}}_user.metadata.security.compartments{{/toJson}},\"minimum_should_match_field\":\"security_compartments_min\"}}},{\"terms\": {\"security_dissemination\": {{#toJson}}_user.metadata.security.dissemination{{/toJson}}}},{\"terms\":{\"source\":{{#toJson}}_user.metadata.security.source{{/toJson}}}}]}}"
+      }
+    },
+    "field_security" : {
+      "grant" : [ "*"],
+      "except": [ "source" ]
+    }
+  }]
+}
+
+#CREATE USERS
+PUT _xpack/security/user/barry_white
+{
+  "username": "barry_white",
+  "password": "testtest",
+  "roles": ["elasticon_policy", "kibana_user"],
+  "full_name": "Barry White",
+  "email": "bw@cantgetenough.com",
+  "metadata": {
+    "security": {
+      "level": ["U","S"],
+      "compartments": ["NONE"],
+      "dissemination": ["NONE", "OUOF","EYEEVIF"],
+      "region": ["SE"],
+      "source": ["vulcans", "q"]
+    }
+  }
+}
+PUT _xpack/security/user/jack_black
+{
+  "username": "jack_black",
+  "password": "testtest",
+  "roles": ["elasticon_policy", "kibana_user"],
+  "full_name": "Jack Black",
+  "email": "jb@tenaciousd.com",
+  "metadata": {
+    "security": {
+      "level": ["U","S","T"],
+      "compartments": ["NONE", "IS", "KT"],
+      "dissemination": ["NONE", "OUOF","NROFON","EYEEVIF"],
+      "region": ["NW", "E"],
+      "source": ["humans", "borg"]
+    }
+  }
+}
+PUT _xpack/security/user/james_brown
+{
+  "username": "james_brown",
+  "password": "testtest",
+  "roles": ["elasticon_policy", "kibana_user"],
+  "full_name": "James Brown",
+  "email": "jb@newbag.com",
+  "metadata": {
+    "security": {
+      "level": ["U","S","T"],
+      "compartments": ["NONE", "IS","KT","AMMAG"],
+      "dissemination": ["NONE", "OUOF","NROFON","EYEEVIF"],
+      "region": ["N", "S", "E", "W", "SE", "NW"],
+      "source": ["borg", "ferengi", "klingons", "bajorans", "q", "vulcans", "andorians", "romulans", "cardassians", "humans"]
+    }
+  }
+}
+PUT _xpack/security/user/earl_grey
+{
+  "username": "earl_grey",
+  "password": "testtest",
+  "roles": [
+    "elasticon_external_policy",
+    "kibana_dashboard_only_user"
+  ],
+  "full_name": "Earl Grey",
+  "email": "eg@northumberland.co.uk",
+  "metadata": {
+    "security": {
+      "level": ["U"],
+      "compartments": ["NONE"],
+      "dissemination": ["NONE", "OUOF","EYEEVIF"],
+      "region": ["N", "S", "E", "W", "SE", "NW"],
+      "source": ["borg", "ferengi", "klingons", "bajorans", "q", "vulcans", "andorians", "romulans", "cardassians", "humans"]
+    }
+  }
+}
+
+

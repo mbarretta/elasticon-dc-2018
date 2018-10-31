@@ -1,0 +1,45 @@
+{
+  "mappings": {
+    "doc": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "@version": {
+          "type": "keyword"
+        },
+        "date": {
+          "type": "date"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "remark": {
+          "type": "text"
+        },
+        "region": {
+          "type": "keyword"
+        },
+        "security_compartments": {
+          "type": "keyword"
+        },
+        "security_compartments_min": {
+          "type": "short"
+        },
+        "security_level": {
+          "type": "keyword"
+        },
+        "security_dissemination": {
+          "type": "keyword"
+        },
+        "source": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}
